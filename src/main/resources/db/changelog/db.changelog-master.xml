@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    
+    <changeSet id="1" author="xmlreader">
+        <createTable tableName="categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(500)"/>
+            <column name="emoji" type="VARCHAR(10)"/>
+            <column name="is_active" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="categories" indexName="idx_categories_name">
+            <column name="name"/>
+        </createIndex>
+        
+        <createIndex tableName="categories" indexName="idx_categories_active">
+            <column name="is_active"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="2" author="xmlreader">
+        <createTable tableName="activities">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2000)"/>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_activities_category" 
+                             referencedTableName="categories" referencedColumnNames="id"/>
+            </column>
+            <column name="location" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)"/>
+            <column name="min_participants" type="INTEGER"/>
+            <column name="max_participants" type="INTEGER"/>
+            <column name="start_time" type="TIMESTAMP"/>
+            <column name="end_time" type="TIMESTAMP"/>
+            <column name="is_active" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="activities" indexName="idx_activities_category">
+            <column name="category_id"/>
+        </createIndex>
+        
+        <createIndex tableName="activities" indexName="idx_activities_active">
+            <column name="is_active"/>
+        </createIndex>
+        
+        <createIndex tableName="activities" indexName="idx_activities_location">
+            <column name="location"/>
+        </createIndex>
+        
+        <createIndex tableName="activities" indexName="idx_activities_time">
+            <column name="start_time"/>
+            <column name="end_time"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="3" author="xmlreader">
+        <createTable tableName="locations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(500)"/>
+            <column name="city" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="DECIMAL(10,8)"/>
+            <column name="longitude" type="DECIMAL(11,8)"/>
+            <column name="is_active" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="locations" indexName="idx_locations_city">
+            <column name="city"/>
+        </createIndex>
+        
+        <createIndex tableName="locations" indexName="idx_locations_coords">
+            <column name="latitude"/>
+            <column name="longitude"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="4" author="xmlreader">
+        <insert tableName="categories">
+            <column name="name" value="Квесты"/>
+            <column name="emoji" value="🧩"/>
+            <column name="description" value="Комнаты-квесты, escape rooms"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+        
+        <insert tableName="categories">
+            <column name="name" value="Футбол"/>
+            <column name="emoji" value="⚽"/>
+            <column name="description" value="Футбольные матчи, аренда полей"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+        
+        <insert tableName="categories">
+            <column name="name" value="Ивенты"/>
+            <column name="emoji" value="🎪"/>
+            <column name="description" value="Концерты, выставки, фестивали"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+        
+        <insert tableName="categories">
+            <column name="name" value="Спорт"/>
+            <column name="emoji" value="🏃"/>
+            <column name="description" value="Спортивные мероприятия"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+        
+        <insert tableName="categories">
+            <column name="name" value="Воркшопы"/>
+            <column name="emoji" value="🔧"/>
+            <column name="description" value="Мастер-классы, обучение"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+        
+        <insert tableName="categories">
+            <column name="name" value="Игры"/>
+            <column name="emoji" value="🎮"/>
+            <column name="description" value="Настольные игры, киберспорт"/>
+            <column name="created_at" value="NOW()"/>
+        </insert>
+    </changeSet>
+    
+</databaseChangeLog>
