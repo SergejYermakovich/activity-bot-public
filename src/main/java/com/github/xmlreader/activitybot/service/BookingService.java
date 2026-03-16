@@ -24,6 +24,7 @@ public class BookingService {
     
     private final BookingRepository bookingRepository;
     private final ActivityRepository activityRepository;
+    private final NotificationService notificationService;
     
     @Transactional
     public BookingResponse createBooking(BookingRequest request, Long userTelegramId, String userName) {
@@ -77,6 +78,14 @@ public class BookingService {
         Booking savedBooking = bookingRepository.save(booking);
         log.info("Created booking {} for user {} on activity {}", 
                 savedBooking.getId(), userTelegramId, activity.getTitle());
+        
+        // Планируем напоминания
+        try {
+            notificationService.scheduleBookingReminders(savedBooking);
+        } catch (Exception e) {
+            log.error("Failed to schedule reminders for booking {}: {}", 
+                     savedBooking.getId(), e.getMessage(), e);
+        }
         
         return mapToBookingResponse(savedBooking, activity);
     }

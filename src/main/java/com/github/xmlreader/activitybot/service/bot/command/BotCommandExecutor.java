@@ -22,6 +22,8 @@ public class BotCommandExecutor {
     private final CancelBookingCommand cancelBookingCommand;
     private final CreateActivityCommand createActivityCommand;
     private final CancelCreateCommand cancelCreateCommand;
+    private final NotificationsCommand notificationsCommand;
+    private final SetReminderCommand setReminderCommand;
 
     public void execute(Long chatId, String userName, String fullCommand) {
         String[] parts = fullCommand.split(" ", 2);
@@ -59,6 +61,17 @@ public class BotCommandExecutor {
         
         if ("/cancel_create".equals(command)) {
             cancelCreateCommand.execute(chatId);
+            return;
+        }
+        
+        // Handle notification commands
+        if ("/notifications".equals(command)) {
+            notificationsCommand.execute(chatId);
+            return;
+        }
+        
+        if ("/set_reminder".equals(command)) {
+            setReminderCommand.executeWithArgs(chatId, argument);
             return;
         }
         

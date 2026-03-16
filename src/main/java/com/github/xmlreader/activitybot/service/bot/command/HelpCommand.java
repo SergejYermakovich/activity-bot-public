@@ -42,6 +42,10 @@ public class HelpCommand implements BotCommand {
                 /create - Создать новую активность
                 /cancel_create - Отменить создание
                 
+                🔔 *Уведомления:*
+                /notifications - Настройки уведомлений
+                /set_reminder - Изменить напоминания
+                
                 ❓ *Другое:*
                 /help - Эта справка
                 
