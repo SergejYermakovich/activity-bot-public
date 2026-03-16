@@ -20,7 +20,7 @@
     
     <properties>
         <java.version>21</java.version>
-        <telegrambots.version>6.9.7.1</telegrambots.version>
+        <telegrambots.version>9.2.1</telegrambots.version>
     </properties>
     
     <dependencies>
@@ -53,13 +53,19 @@
         <!-- Telegram Bot API -->
         <dependency>
             <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
+            <artifactId>telegrambots-meta</artifactId>
             <version>${telegrambots.version}</version>
         </dependency>
         
         <dependency>
             <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
+            <artifactId>telegrambots-longpolling</artifactId>
+            <version>${telegrambots.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-client</artifactId>
             <version>${telegrambots.version}</version>
         </dependency>
         

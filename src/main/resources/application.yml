@@ -25,12 +25,9 @@ spring:
       enabled: true
       path: /h2-console
 
-telegram:
-  bot:
-    token: ${TELEGRAM_BOT_TOKEN:test_token}
-    username: ${TELEGRAM_BOT_USERNAME:test_bot}
-    webhook:
-      enabled: false
+bot:
+  name: ${TELEGRAM_BOT_USERNAME:ActivityBot}
+  token: ${TELEGRAM_BOT_TOKEN:test_token}
 
 management:
   endpoints:
