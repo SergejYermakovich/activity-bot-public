@@ -69,4 +69,24 @@ public class Activity {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    @OneToMany(mappedBy = "activity", fetch = FetchType.LAZY)
+    private Set<Booking> bookings = new HashSet<>();
+    
+    public int getBookedParticipantsCount() {
+        if (bookings == null) return 0;
+        return bookings.stream()
+                .filter(b -> b.getStatus() == Booking.BookingStatus.CONFIRMED)
+                .mapToInt(Booking::getParticipantsCount)
+                .sum();
+    }
+    
+    public int getAvailableSpots() {
+        if (maxParticipants == null) return Integer.MAX_VALUE;
+        return maxParticipants - getBookedParticipantsCount();
+    }
+    
+    public boolean isFull() {
+        return getAvailableSpots() <= 0;
+    }
 }

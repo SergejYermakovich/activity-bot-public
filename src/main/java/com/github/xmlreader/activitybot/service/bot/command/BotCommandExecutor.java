@@ -1,6 +1,7 @@
 package com.github.xmlreader.activitybot.service.bot.command;
 
 import com.github.xmlreader.activitybot.service.ActivityService;
+import com.github.xmlreader.activitybot.service.BookingService;
 import com.github.xmlreader.activitybot.service.bot.sender.MessageSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,40 @@ public class BotCommandExecutor {
     
     private final MessageSender messageSender;
     private final ActivityService activityService;
+    private final BookingService bookingService;
     private final Map<String, BotCommand> commands;
+    private final BookCommand bookCommand;
+    private final CancelBookingCommand cancelBookingCommand;
 
-    public void execute(Long chatId, String command) {
+    public void execute(Long chatId, String userName, String fullCommand) {
+        String[] parts = fullCommand.split(" ", 2);
+        String command = parts[0];
+        String argument = parts.length > 1 ? parts[1].trim() : null;
+        
+        // Handle special commands with arguments
+        if ("/book".equals(command) && argument != null) {
+            try {
+                Long activityId = Long.parseLong(argument);
+                bookCommand.confirmBooking(chatId, userName, activityId);
+                return;
+            } catch (NumberFormatException e) {
+                bookCommand.execute(chatId);
+                return;
+            }
+        }
+        
+        if ("/cancel_booking".equals(command) && argument != null) {
+            try {
+                Long bookingId = Long.parseLong(argument);
+                cancelBookingCommand.executeWithId(chatId, bookingId);
+                return;
+            } catch (NumberFormatException e) {
+                cancelBookingCommand.execute(chatId);
+                return;
+            }
+        }
+        
+        // Handle standard commands
         BotCommand botCommand = commands.get(command);
         
         if (botCommand == null) {
