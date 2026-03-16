@@ -129,7 +129,7 @@ public class ActivityService {
                 .collect(Collectors.toList());
     }
     
-    private ActivityResponse mapToActivityResponse(Activity activity) {
+    public ActivityResponse mapToActivityResponse(Activity activity) {
         Category category = activity.getCategory();
         
         return ActivityResponse.builder()
