@@ -19,7 +19,7 @@ Activity Bot помогает пользователям находить и о�
 - **Telegram Bot API** 6.9.7.1
 - **Spring Data JPA**
 - **PostgreSQL / H2**
-- **Liquibase** (миграции БД)
+- **Flyway** (миграции БД)
 - **Lombok**
 - **OpenAPI/Swagger** 2.3.0
 - **Spring Validation**
@@ -131,9 +131,15 @@ http://localhost:8080/swagger-ui.html
 
 ### Миграции
 
-Проект использует Liquibase для управления миграциями БД.
+Проект использует **Flyway** для управления миграциями БД.
 
-Файл миграций: `src/main/resources/db/changelog/db.changelog-master.xml`
+Миграции находятся в: `src/main/resources/db/migration/`
+
+**Формат:** SQL файлы с префиксом версии:
+- `V1__Create_categories_table.sql`
+- `V2__Create_activities_table.sql`
+- `V3__Create_locations_table.sql`
+- `V4__Create_bookings_table.sql`
 
 ### Таблицы
 
