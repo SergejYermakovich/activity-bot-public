@@ -38,6 +38,10 @@ public class HelpCommand implements BotCommand {
                 /my_bookings - Мои бронирования
                 /cancel_booking <ID> - Отменить бронирование
                 
+                📝 *Организаторам:*
+                /create - Создать новую активность
+                /cancel_create - Отменить создание
+                
                 ❓ *Другое:*
                 /help - Эта справка
                 

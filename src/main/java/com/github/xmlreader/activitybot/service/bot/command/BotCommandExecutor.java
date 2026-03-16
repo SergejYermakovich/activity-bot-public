@@ -20,6 +20,8 @@ public class BotCommandExecutor {
     private final Map<String, BotCommand> commands;
     private final BookCommand bookCommand;
     private final CancelBookingCommand cancelBookingCommand;
+    private final CreateActivityCommand createActivityCommand;
+    private final CancelCreateCommand cancelCreateCommand;
 
     public void execute(Long chatId, String userName, String fullCommand) {
         String[] parts = fullCommand.split(" ", 2);
@@ -47,6 +49,17 @@ public class BotCommandExecutor {
                 cancelBookingCommand.execute(chatId);
                 return;
             }
+        }
+        
+        // Handle create activity commands
+        if ("/create".equals(command)) {
+            createActivityCommand.execute(chatId);
+            return;
+        }
+        
+        if ("/cancel_create".equals(command)) {
+            cancelCreateCommand.execute(chatId);
+            return;
         }
         
         // Handle standard commands
