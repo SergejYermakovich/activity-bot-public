@@ -26,13 +26,24 @@ public class TextMessageHandler implements UpdateHandler {
 
         Long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText();
+        String userName = getUserName(update);
 
         log.debug("Received message from {}: {}", chatId, text);
 
         if (text.startsWith("/")) {
-            commandExecutor.execute(chatId, text);
-        } else {
-            messageSender.sendMessage(chatId, "Я пока не понимаю эту команду. Используйте /help для списка доступных команд.");
+            commandExecutor.execute(chatId, userName, text);
         }
+    }
+    
+    private String getUserName(Update update) {
+        if (update.getMessage().getFrom() != null) {
+            String firstName = update.getMessage().getFrom().getFirstName();
+            String lastName = update.getMessage().getFrom().getLastName();
+            if (lastName != null) {
+                return firstName + " " + lastName;
+            }
+            return firstName;
+        }
+        return "User";
     }
 }

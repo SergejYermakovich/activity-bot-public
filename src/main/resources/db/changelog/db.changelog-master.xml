@@ -155,4 +155,44 @@
         </insert>
     </changeSet>
     
+    <changeSet id="5" author="siarhei">
+        <createTable tableName="bookings">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="user_telegram_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" type="VARCHAR(200)"/>
+            <column name="activity_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_bookings_activity" 
+                             referencedTableName="activities" referencedColumnNames="id"/>
+            </column>
+            <column name="participants_count" type="INTEGER" defaultValue="1"/>
+            <column name="status" type="VARCHAR(50)" defaultValue="CONFIRMED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DECIMAL(10,2)"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="bookings" indexName="idx_bookings_user_telegram">
+            <column name="user_telegram_id"/>
+        </createIndex>
+        
+        <createIndex tableName="bookings" indexName="idx_bookings_activity">
+            <column name="activity_id"/>
+        </createIndex>
+        
+        <createIndex tableName="bookings" indexName="idx_bookings_status">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+    
 </databaseChangeLog>

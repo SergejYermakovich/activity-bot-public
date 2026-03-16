@@ -53,7 +53,20 @@ public class SearchCommand implements BotCommand {
             if (activity.getStartTime() != null) {
                 text.append("🕐 ").append(activity.getStartTime().toLocalDate()).append("\n");
             }
-            text.append("\n");
+            
+            // Show available spots
+            int availableSpots = activity.getAvailableSpots();
+            if (activity.getMaxParticipants() != null) {
+                if (availableSpots <= 0) {
+                    text.append("❌ Мест нет\n");
+                } else if (availableSpots <= 3) {
+                    text.append("🔥 Осталось мест: ").append(availableSpots).append("\n");
+                } else {
+                    text.append("👥 Мест: ").append(availableSpots).append("\n");
+                }
+            }
+            
+            text.append("➡️ Записаться: /book ").append(activity.getId()).append("\n\n");
         });
 
         if (activities.size() > 10) {

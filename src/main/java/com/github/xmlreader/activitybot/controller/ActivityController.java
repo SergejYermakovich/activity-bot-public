@@ -2,9 +2,12 @@ package com.github.xmlreader.activitybot.controller;
 
 import com.github.xmlreader.activitybot.dto.ActivityRequest;
 import com.github.xmlreader.activitybot.dto.ActivityResponse;
+import com.github.xmlreader.activitybot.dto.BookingRequest;
+import com.github.xmlreader.activitybot.dto.BookingResponse;
 import com.github.xmlreader.activitybot.dto.CategoryRequest;
 import com.github.xmlreader.activitybot.dto.CategoryResponse;
 import com.github.xmlreader.activitybot.service.ActivityService;
+import com.github.xmlreader.activitybot.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,12 @@ import java.util.List;
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final BookingService bookingService;
+    
+    public ActivityController(ActivityService activityService, BookingService bookingService) {
+        this.activityService = activityService;
+        this.bookingService = bookingService;
+    }
 
     // Activity endpoints
     
@@ -74,5 +83,42 @@ public class ActivityController {
     public ResponseEntity<String> initializeCategories() {
         activityService.initializeDefaultCategories();
         return ResponseEntity.ok("Категории инициализированы");
+    }
+    
+    // Booking endpoints
+    
+    @PostMapping("/bookings")
+    @Operation(summary = "Создать бронирование", description = "Записывает пользователя на активность")
+    public ResponseEntity<BookingResponse> createBooking(
+            @RequestBody BookingRequest request,
+            @RequestHeader(value = "X-Telegram-Id", required = false) Long telegramId,
+            @RequestHeader(value = "X-User-Name", required = false) String userName) {
+        
+        Long userTelegramId = telegramId != null ? telegramId : 1L; // Default for testing
+        String name = userName != null ? userName : "User";
+        
+        return ResponseEntity.ok(bookingService.createBooking(request, userTelegramId, name));
+    }
+    
+    @GetMapping("/bookings/my")
+    @Operation(summary = "Получить мои бронирования", description = "Возвращает бронирования текущего пользователя")
+    public ResponseEntity<List<BookingResponse>> getMyBookings(
+            @RequestHeader("X-Telegram-Id") Long telegramId) {
+        return ResponseEntity.ok(bookingService.getUserActiveBookings(telegramId));
+    }
+    
+    @DeleteMapping("/bookings/{id}")
+    @Operation(summary = "Отменить бронирование", description = "Отменяет бронирование по ID")
+    public ResponseEntity<Void> cancelBooking(
+            @PathVariable Long id,
+            @RequestHeader("X-Telegram-Id") Long telegramId) {
+        bookingService.cancelBooking(id, telegramId);
+        return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/activities/{id}/bookings")
+    @Operation(summary = "Получить бронирования активности", description = "Возвращает все бронирования для активности (для админа)")
+    public ResponseEntity<List<BookingResponse>> getActivityBookings(@PathVariable Long id) {
+        return ResponseEntity.ok(bookingService.getActivityBookings(id));
     }
 }
